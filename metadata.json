@@ -1,0 +1,5 @@
+{
+  "name": "PromptLib",
+  "description": "A developer-centric tool for browsing, managing, and constructing AI design prompts for web interfaces.",
+  "requestFramePermissions": []
+}
