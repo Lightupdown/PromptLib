@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Prompt } from '../types';
 import { Button, Card, Badge, Dropdown, DropdownItem } from './ui';
@@ -10,12 +11,22 @@ interface PromptCardProps {
 
 export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
   const [copied, setCopied] = useState(false);
+  const [likes, setLikes] = useState(prompt.likes);
+  const [isLiked, setIsLiked] = useState(false);
   const { t, language } = useLanguage();
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleLike = () => {
+    // Unlimited likes logic
+    setLikes(prev => prev + 1);
+    setIsLiked(true);
+    // Optional: Reset "liked" visual state after a moment to allow re-liking with visual feedback
+    setTimeout(() => setIsLiked(false), 200);
   };
 
   const isZh = language === 'zh';
@@ -72,9 +83,12 @@ export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
 
         {/* Action Bar */}
         <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800/50 mt-2">
-          <button className="flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-red-500 transition-colors">
-            <Heart size={14} />
-            <span>{prompt.likes}</span>
+          <button 
+            onClick={handleLike}
+            className={`flex items-center gap-1 text-xs font-medium transition-all active:scale-95 ${isLiked ? 'text-red-500' : 'text-slate-500 hover:text-red-500'}`}
+          >
+            <Heart size={14} className={isLiked ? "fill-current" : ""} />
+            <span>{likes}</span>
           </button>
 
           {isZh ? (

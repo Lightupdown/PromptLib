@@ -1,5 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import { X } from 'lucide-react';
 
 export const cn = (...classes: (string | undefined | null | false)[]) => {
   return classes.filter(Boolean).join(' ');
@@ -166,8 +167,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ trigger, children, align = '
           className={cn(
             "absolute z-50 mt-2 w-40 origin-top-right rounded-md bg-white dark:bg-slate-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200",
             align === 'right' ? 'right-0' : 'left-0',
-            // If at bottom of screen, show above (simplified logic: usually bottom-full if needed, but standard dropdown is below)
-            "bottom-full mb-2" // Show above by default for this app's cards
+            "bottom-full mb-2" 
           )}
         >
           <div className="py-1" role="none">
@@ -201,5 +201,35 @@ export const DropdownItem: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement
     >
       {children}
     </button>
+  );
+};
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+}
+
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 animate-in zoom-in-95 duration-200 scale-100">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{title}</h3>
+          <button 
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <div>
+          {children}
+        </div>
+      </div>
+    </div>
   );
 };
